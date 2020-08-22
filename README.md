@@ -1,34 +1,33 @@
-# 一个简单的监控redis性能的python脚本
+  Convert script to python3. 
+  Translate text to english
+  
+# simple python script to monitor redis performance
 
 
-## [上一篇](http://blog.51cto.com/legehappy/2145967)已经讲了如何监控memcached了，现在也顺带讲如何监控redis。
+[Previous article](http://blog.51cto.com/legehappy/2145967) has already talked about how to monitor memcached, and now also how to monitor redis by the way.
 
-## 首先介绍下监控redis那些信息：
-* Redis ping：检验ping
-* Redis alive：查看检查端口是否alive
-* Redis connections：查看连接数
-* Redis blockedClients：正在等待阻塞客户端数量
-* Redis connectionsUsage：redis的连接使用率
-* Redis memoryUsage：redis内存使用量
-* Redis memoryUsageRate：redis内存使用率
-* Redis evictedKeys：运行以来删除过的key的数量
-* Redis rejectedConnections：拒绝连接数
-* Redis ops：redis的OPS
-* Redis hitRate：redis命中率
-
-
-
-### 安装需要的环境
-
+## First introduce the information of monitoring redis:
+* Redis ping: check ping
+* Redis alive: Check whether the port is alive
+* Redis connections: view the number of connections
+* Redis blockedClients: the number of blocked clients waiting
+* Redis connectionsUsage: Redis connection usage rate
+* Redis memoryUsage: Redis memory usage
+* Redis memoryUsageRate: redis memory usage rate
+* Redis evictedKeys: The number of keys deleted since the operation
+* Redis rejectedConnections: the number of rejected connections
+* Redis ops: OPS of redis
+* Redis hitRate: redis hit rate
 ```
-pip install redis
+pip3 install redis
 ```
 
 
-### 测试脚本，查看监控redis信息（假如redis没设置密码，可不填密码执行）：
+43/5000
+### Test script to view and monitor redis information (if redis has not set a password, it can be executed without a password):
 
 ``` 
-/bin/python /home/python/check_redis.py test 192.168.4.18 6379 password
+/bin/python3 /home/python/check_redis.py test 192.168.4.18 6379 password
 Redis ping: True
 Redis alive: 0
 Redis connections: 447
@@ -42,11 +41,10 @@ Redis ops: 1050
 Redis hitRate: 71.87%
 ```
 
-### 最后加入到zabbix自定义key上
-
+### Finally added to the zabbix custom key
 
 ```
 cat /etc/zabbix/zabbix_agentd.d/redis.conf
 # Redis
-UserParameter=redis.stats[*],/bin/python /home/python/check_redis.py $1 192.168.4.18 6379 password
+UserParameter=redis.stats[*],/bin/python3 /home/python/check_redis.py $1 192.168.4.18 6379 password
 ```
