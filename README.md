@@ -1,5 +1,5 @@
-  convert script to python3
-  translate  to english
+  Convert script to python3. 
+  Translate text to english
   
 # simple python script to monitor redis performance
 
