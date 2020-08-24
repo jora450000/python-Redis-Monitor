@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-__author__ = 'chenmingle'
+__author__ = 'chenmingle, jora450000'
 
 import sys
 import subprocess
 import json
-
-try:
-    import redis
-except Exception as  e:
-    print ('pip install redis')
-    sys.exit(1)
+import socket
+import redis
 
 
 class Redis(object):
@@ -26,6 +22,15 @@ class Redis(object):
             self.info = self.rds.info()
         except Exception as e:
             self.info = None
+
+    def full_info(self):
+        try:
+	    
+            for i in self.info:
+               print (f"{i}: {self.info[i]}")
+        except Exception as e:
+            return 0
+
 
     def redis_connections(self):
         try:
@@ -121,9 +126,17 @@ class Redis(object):
 
 
 def check_alive(host, port):
-    cmd = 'nc -z %s %s > /dev/null 2>&1' % (host, port)
-    return subprocess.call(cmd, shell=True)
-
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+       result = sock.connect_ex((host, int(port)))
+       sock.close()
+       if result == 0:
+            return True
+       else:
+            return False
+    except Exception as e:
+            print(e,  file=sys.stderr)
+            return None 
 
 def parse(type, host, port, password):
     rds = Redis(host, port, password)
@@ -149,8 +162,12 @@ def parse(type, host, port, password):
         print (rds.hitRate())
     elif type == 'ops':
         print (rds.ops())
+    elif type == 'info':
+         rds.full_info()
+    elif type == 'test':
+         rds.test()
     else:
-        rds.test()
+         print("bad command")
 
 if __name__ == '__main__':
     try:
